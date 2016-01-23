@@ -1,7 +1,7 @@
 class MoviesController < ApplicationController
   
   def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+    params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
   end
 
   def show
@@ -61,4 +61,13 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  def director
+    movies, title = Movie.by_director params[:movie_id]
+    if movies
+      @movies = movies
+    else
+      flash[:notice] = "'#{title}' has no director info."
+      redirect_to movies_path
+    end
+  end
 end
